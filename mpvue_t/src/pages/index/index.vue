@@ -1,97 +1,124 @@
 <template>
-  <div class="container" @click="clickHandle('test click', $event)">
-    <div class="userinfo" @click="bindViewTap">
-      <img class="userinfo-avatar" v-if="userInfo.avatarUrl" :src="userInfo.avatarUrl" background-size="cover" />
-      <div class="userinfo-nickname">
-        <card :text="userInfo.nickName"></card>
+  <div class="index-container">
+    <div class="index-wrap">
+      <div class="from-item" v-for="(item, index) in fromList" :key="index">
+        <InputSelect
+          :label="item.label"
+          :formType="item.formType"
+          :inputType="item.inputType"
+          :dataList="item.dataList"
+          :unit="item.unit"
+          :formKey="item.formKey"
+          @change="onChange"
+        ></InputSelect>
       </div>
     </div>
-    <div class="usermotto">
-      <div class="user-motto">
-        <card :text="motto"></card>
-      </div>
-    </div>
-    <form class="form-container">
-      <input type="text" class="form-control" v-model="motto" placeholder="v-model" />
-      <input type="text" class="form-control" v-model.lazy="motto" placeholder="v-model.lazy" />
-    </form>
-    <a href="/pages/counter" class="counter">去往Vuex示例页面</a>
+    <div class="index-submit" @click="onSubmit">提交</div>
   </div>
 </template>
 
 <script>
-import card from "@/components/card";
+import InputSelect from "@/components/InputSelect";
 
 export default {
   data() {
     return {
-      motto: "Hello World",
-      userInfo: {}
+      fromList: [
+        {
+          formKey: "name",
+          label: "姓名",
+          formType: "input",
+          inputType: "text"
+        },
+        {
+          formKey: "phone",
+          label: "电话",
+          formType: "input",
+          inputType: "number"
+        },
+        {
+          formKey: "amount",
+          label: "金额",
+          formType: "input",
+          inputType: "number",
+          unit: "万元"
+        },
+        {
+          formKey: "country",
+          label: "国家",
+          formType: "select",
+          dataList: [
+            {
+              label: '美国',
+              value: 'USA'
+            },
+            {
+              label: '中国',
+              value: 'China'
+            },
+            {
+              label: '巴西',
+              value: 'Brazil'
+            },
+            {
+              label: '日本',
+              value: 'Japan'
+            }
+          ]
+        }
+      ],
+      params: {}
     };
   },
   components: {
-    card
+    InputSelect
   },
   methods: {
-    bindViewTap() {
-      const url = "/pages/logs";
-      wx.navigateTo({ url });
+    onSubmit() {
+      console.log(this.params);
+      // const params = {
+
+      // }
     },
-    getUserInfo() {
-      // 调用登录接口
-      wx.login({
-        success: () => {
-          wx.getUserInfo({
-            success: res => {
-              this.userInfo = res.userInfo;
-            }
-          });
-        }
-      });
-    },
-    clickHandle(msg, ev) {
-      console.log("clickHandle:", msg, ev);
+    onChange(...data) {
+      Object.assign(this.params, data[0])
     }
   },
-  created() {
-    // 调用应用实例的方法获取全局数据
-    this.getUserInfo();
-  }
+  created() {}
 };
 </script>
 
 <style lang="scss" scoped>
-.userinfo {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  .userinfo-avatar {
-    width: 128rpx;
-    height: 128rpx;
-    margin: 20rpx;
-    border-radius: 50%;
+.index-container {
+  width: 100%;
+  height: 100%;
+  background: #f1f1f1;
+  position: absolute;
+  overflow: scroll;
+  padding: 20rpx 0;
+
+  .index-submit {
+    width: 100%;
+    height: 88rpx;
+    line-height: 88rpx;
+    text-align: center;
+    font-size: 36rpx;
+    color: #fff;
+    background: #505da8;
+    position: fixed;
+    bottom: 0;
   }
-  .userinfo-nickname {
-    color: #aaa;
+
+  .from-item {
+    width: 95%;
+    margin: 0 auto;
   }
-}
 
-.usermotto {
-  margin-top: 150px;
-}
-
-.form-control {
-  display: block;
-  padding: 0 12px;
-  margin-bottom: 5px;
-  border: 1px solid #ccc;
-}
-
-.counter {
-  display: inline-block;
-  margin: 10px auto;
-  padding: 5px 10px;
-  color: blue;
-  border: 1px solid blue;
+  .index-wrap {
+    width: 95%;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 8rpx;
+  }
 }
 </style>
