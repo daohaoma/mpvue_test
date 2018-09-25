@@ -2,8 +2,8 @@
   <div class="form-wrap">
     <div class="index-input" v-if="formType === 'input'">
       {{ label }}
-      <input v-if="inputType === 'number'" type="number" v-model="formVal" :placeholder="placeholder + label" @input="getValue(formKey)">
-      <input v-else type="text" v-model="formVal" :placeholder="placeholder + label" @input="getValue(formKey)">
+      <input v-if="inputType === 'number'" type="number" v-model="formVal" :placeholder="placeholder + label" @change="getValue(formKey)">
+      <input v-else type="text" v-model="formVal" :placeholder="placeholder + label" @change="getValue(formKey)">
       <span v-if="unit">{{ unit }}</span>
     </div>
     <div class="index-picker" v-if="formType === 'select'">
@@ -40,7 +40,9 @@ export default {
       }
       // console.log(this.fKey, this.formVal)
       const valObj = {}
-      valObj[this.fKey] = this.formVal
+      // valObj[this.fKey] = this.formVal
+      valObj['key'] = this.fKey
+      valObj['value'] = this.formVal
       this.$emit('change', valObj) // 子组件向父组件传值
     }
   },

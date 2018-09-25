@@ -67,7 +67,8 @@ export default {
           ]
         }
       ],
-      params: {}
+      params: [],
+      keyList: []
     };
   },
   components: {
@@ -75,13 +76,19 @@ export default {
   },
   methods: {
     onSubmit() {
-      console.log(this.params);
-      // const params = {
-
-      // }
+      console.log(this.params)
     },
     onChange(...data) {
-      Object.assign(this.params, data[0])
+      if (this.keyList.indexOf(data[0].key) < 0) {
+        this.params.push(data[0])
+        this.keyList.push(data[0].key)
+      } else {
+        this.params.forEach((item, index) => {
+          if (item.key === data[0].key) {
+            item.value = data[0].value
+          }
+        })
+      }
     }
   },
   created() {}
